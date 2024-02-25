@@ -1,0 +1,16 @@
+A Homelab3 tokenkezelése
+Általában elvárás a tokenekkel szemben, hogy egyszerűen feldolgozhatók, könnyenkezelhetőek legyenek.
+Emiatt általános szabály, hogy a tokeneket egy tokentáblából egy általános szabály alapján azonosítsuk be.
+A leggyakrabban ez a token első vagy utolsó karakterének speciális jelölése. 8 bites környezetben tipikusan ez a 7. bit 1-esbe állítása szokott lenni.
+A Homelab 2 etekintetben követi is a negszokásokat, de a Homelab 3 egészen érdekes és egyedi tokenkezelést vezetett be.
+1 - A bővíthetőség érdekében a DCB részévé tették a token tábla kezdőcímét is, így később ez tetszőlegesen módosítható ... lenne, ha csak egy tokentábla lenne.
+2 - A Homelab 3 azonban két tokentáblát használ. Az egyik, az átdefiniálható, $1C3C címen kezdődő tábla, amiben a $80-$C8 kódú tokenek tárolódnak. $C8 felett azonban
+a tokenek a $265F táblában érhetők el.
+3 - Míg szokás a tokeneket egységes szerkezetben kezelni, addig a Homelab 3 a két tokentáblában eltérő módon tárolja a tokeneket, igaz, az eltérés kicsi. Az első táblában a függvények
+konkrétan a [$AF-$C8] kódokba vannak bepréselve. Az ilyen kódú tokenek megjelenítése automatán kiegészül a "(" karakterrel. A második tokentáblában azonban már a "(" karakterek is tárolva vannak a tokenekhez.
+4 - Elvárás szokott az is lenni, hogy a tokenek a forrásszöveg felolvasásánál egyértelműen beazonosíthatóak legyenek, azaz ne legyen közöttük átfedés, vagyis, ha a tokentáblában találtunk egy teljes 
+illeszkedést, akkor azzal azonnal visszatérhessünk, mint beazonosított tokennel.
+5 - A Homelab 3 azonban bevezette a $ operátort, ami a hexadecimális számok prefixe, és ezzel erősen felrúgta az egyszerű tokenkezelés lehetőségét. 
+6 Mindezt azonban megfejelték egy olyan token bevezetésével is, ami még a tokentáblában sincs benne. Ez pedig az INKEY$. A Tokentábla tartalmazza ugyan az INKEY szót, de ez az INKEY műveletet azonosítja. 
+Meglepő módon az INKEY$ egy olyan token, aminek nem egy kódja van. Két kdból áll. Az első az INKEY kódja, a második azonban a "$", mint karakter kódja. És ezzel a $ jele megkapta a 4. jelentését.
+Nem állítom, hogy nem lehet így értelmezni a bevitt szövegeket, de erősen fura ez a tokenkezelés ...
